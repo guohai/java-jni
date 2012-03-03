@@ -12,8 +12,32 @@ extern "C" {
  * Method:    print
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_org_xkit_demo_jni_HelloJNI_print
+JNIEXPORT void JNICALL Java_org_xkit_demo_jni_HelloJNI_print__
   (JNIEnv *, jobject);
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    print
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_xkit_demo_jni_HelloJNI_print__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    echo
+ * Signature: (ILjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_xkit_demo_jni_HelloJNI_echo
+  (JNIEnv *, jobject, jint, jstring);
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    draw
+ * Signature: ([I)[I
+ */
+JNIEXPORT jintArray JNICALL Java_org_xkit_demo_jni_HelloJNI_draw
+  (JNIEnv *, jobject, jintArray);
 
 #ifdef __cplusplus
 }
