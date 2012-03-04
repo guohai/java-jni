@@ -1,6 +1,9 @@
-Reference http://my.unix-center.net/~Simon_fu/?p=359
+Reference
+http://my.unix-center.net/~Simon_fu/?p=359
+http://java.sun.com/docs/books/jni/html/jniTOC.html
 
-
+more articles
+http://markmail.org/message/4b3ugju6o76v4g73
 
 Be careful about the method signature.
 in c header file I use
@@ -17,6 +20,29 @@ Exception in thread "main" java.lang.UnsatisfiedLinkError: org.xkit.demo.jni.Hel
 	at org.xkit.demo.jni.HelloJNI.print(Native Method)
 	at org.xkit.demo.jni.HelloJNI.main(HelloJNI.java:7)
 
+when call Java method from C, I encounter a fatal error:
+# Problematic frame:
+# V  [libjvm.so+0x414414]  jni_invoke_nonstatic(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, Thread*)+0x114
+the full crash log is hs_err_pid31906.log
+
+when I put jni.initNative() just before jni.call(), it actually works ok.
+it is so weird, because before that, the code order is just like this
+I think the variables do not get modified by others, so it should works when I put jni.initNative() in the beginning of the code
+
+jni.print();
+jni.print("I'm from Java layer");
+jni.print("我是从Java层传递过来的");
+
+System.out.println(jni.echo(2, "am i low case?"));
+
+int[] data = { 7, 4, 5, 63, 3 };
+data = jni.draw(data);
+
+printArray(data);
+jni.initNative();
+jni.call();
+
+compile & run steps
 
 $ cc -I/home/guohai/dev/a/java/jdk1.6.0_25/include/linux/ -I/home/guohai/dev/a/java/jdk1.6.0_25/include/ -fPIC -shared -o libHelloJNI.so org_xkit_demo_jni_HelloJNI.c
 
@@ -33,8 +59,8 @@ I wrote another JNI demo on Windows platform years ago, I almost forget that.
 the hyper link is http://lucane.iteye.com/blog/466187
 
 
-
-
+guohai@KNIGHT:~/dev/workspace/github/0x01/hello-jni/bin$ javap -s -p org/xkit/demo/jni/HelloJNI
+this command can get the exact method signature
 
 guohai@KNIGHT:~/dev/workspace/github/0x01/hello-jni/jni$ ldd libHelloJNI.so 
 	linux-gate.so.1 =>  (0x008d0000)

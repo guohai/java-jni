@@ -7,6 +7,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+JavaVM*   m_pJVM;
+jclass    m_class;
+jobject   m_jni;
+jmethodID m_vmSayHello;
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    initNative
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_xkit_demo_jni_HelloJNI_initNative
+  (JNIEnv *, jobject);
+
 /*
  * Class:     org_xkit_demo_jni_HelloJNI
  * Method:    print
@@ -38,6 +52,14 @@ JNIEXPORT jstring JNICALL Java_org_xkit_demo_jni_HelloJNI_echo
  */
 JNIEXPORT jintArray JNICALL Java_org_xkit_demo_jni_HelloJNI_draw
   (JNIEnv *, jobject, jintArray);
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    call
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_xkit_demo_jni_HelloJNI_call
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

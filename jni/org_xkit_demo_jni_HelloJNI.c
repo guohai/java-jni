@@ -1,6 +1,14 @@
-#include <jni.h>
 #include <stdio.h>
 #include "org_xkit_demo_jni_HelloJNI.h"
+
+_Bool vm_initialize(JNIEnv *env);
+
+void foo_test(char *greeting);
+
+JNIEXPORT jboolean
+JNICALL Java_org_xkit_demo_jni_HelloJNI_initNative(JNIEnv *env, jobject obj) {
+	return vm_initialize(env);
+}
 
 JNIEXPORT void JNICALL
 Java_org_xkit_demo_jni_HelloJNI_print__(JNIEnv *env, jobject obj)
@@ -56,4 +64,36 @@ Java_org_xkit_demo_jni_HelloJNI_draw(JNIEnv *env, jobject obj, jintArray data)
 	(*env) -> SetIntArrayRegion(env, result, 0, l, tmp);
 	(*env) -> ReleaseIntArrayElements(env, data, tmp, 0);
 	return result;
+}
+
+JNIEXPORT void JNICALL
+Java_org_xkit_demo_jni_HelloJNI_call(JNIEnv *env, jobject obj) {
+	(*m_pJVM) -> AttachCurrentThread(m_pJVM, (void **) &env, NULL);
+
+	char *hello = "Hello, I'm from C layer";
+
+	(*env) -> CallVoidMethod(env, m_jni, m_vmSayHello, (*env) -> NewStringUTF(env, hello));
+}
+
+_Bool vm_initialize(JNIEnv *env)
+{
+	m_class = (*env) -> FindClass(env, "org/xkit/demo/jni/HelloJNI");
+
+	jmethodID construction_id = (*env) -> GetMethodID(env, m_class, "<init>", "()V");
+
+	m_vmSayHello = (*env) -> GetMethodID(env, m_class, "vmSayHello", "(Ljava/lang/String;)V");
+
+	m_jni = (*env) -> NewObject(env, m_class, construction_id);
+
+	(*env) -> GetJavaVM(env, &m_pJVM);
+
+	return 1;
+}
+
+/*
+ * just for test
+ */
+void foo_test(char *greeting)
+{
+	printf("%s", greeting);
 }
