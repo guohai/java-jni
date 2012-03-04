@@ -23,6 +23,14 @@ JNIEXPORT jboolean JNICALL Java_org_xkit_demo_jni_HelloJNI_initNative
 
 /*
  * Class:     org_xkit_demo_jni_HelloJNI
+ * Method:    finalizeNative
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_xkit_demo_jni_HelloJNI_finalizeNative
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_xkit_demo_jni_HelloJNI
  * Method:    print
  * Signature: ()V
  */

@@ -1,13 +1,23 @@
 #include <stdio.h>
+#include <string.h>
 #include "org_xkit_demo_jni_HelloJNI.h"
 
 _Bool vm_initialize(JNIEnv *env);
 
+_Bool vm_finalize(JNIEnv *env);
+
 void foo_test(char *greeting);
 
 JNIEXPORT jboolean
-JNICALL Java_org_xkit_demo_jni_HelloJNI_initNative(JNIEnv *env, jobject obj) {
+JNICALL Java_org_xkit_demo_jni_HelloJNI_initNative(JNIEnv *env, jobject obj)
+{
 	return vm_initialize(env);
+}
+
+JNIEXPORT jboolean
+JNICALL Java_org_xkit_demo_jni_HelloJNI_finalizeNative(JNIEnv *env, jobject obj)
+{
+	return vm_finalize(env);
 }
 
 JNIEXPORT void JNICALL
@@ -86,6 +96,15 @@ _Bool vm_initialize(JNIEnv *env)
 	m_jni = (*env) -> NewObject(env, m_class, construction_id);
 
 	(*env) -> GetJavaVM(env, &m_pJVM);
+
+	return 1;
+}
+
+_Bool vm_finalize(JNIEnv *env)
+{
+	(*m_pJVM) -> DetachCurrentThread(m_pJVM);
+
+	(*m_pJVM) -> DestroyJavaVM(m_pJVM);
 
 	return 1;
 }

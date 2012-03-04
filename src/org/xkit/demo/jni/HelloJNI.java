@@ -4,6 +4,8 @@ public class HelloJNI {
 
 	private native boolean initNative();
 
+	private native boolean finalizeNative();
+
 	private native void print();
 
 	private native void print(String msg);
@@ -33,6 +35,8 @@ public class HelloJNI {
 		printArray(data);
 		jni.initNative();
 		jni.call();
+
+//		jni.finalizeNative(); has something wrong here
 	}
 
 	static {
